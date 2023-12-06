@@ -17,8 +17,8 @@ function fillFieldWithMines(nMines, matrix) {
         let randY = getRandomInt(matrix.length);
         let randX = getRandomInt(matrix[0].length);
 
-        if (matrix[randY][randX] != 8) {
-            matrix[randY][randX] = 8;
+        if (!isCellMine(matrix, randY, randX)) {
+            matrix[randY][randX] = "m";
             i++;
         }
     }
@@ -31,7 +31,7 @@ function getRandomInt(max) {
 function fillFieldWithNumber(matrix) {
     for (let i = 0; i < matrix.length; i++) {
         for (let j = 0; j < matrix[i].length; j++) {
-            if (matrix[i][j] == 8) continue;
+            if (isCellMine(matrix, i, j)) continue;
             matrix[i][j] = getSurroundingMinesCount(matrix, i, j);
         }
     }
@@ -53,7 +53,7 @@ function getSurroundingMinesCount(matrix, i, j) {
 }
 
 function isCellMine(matrix, i, j) {
-    return matrix[i]?.[j] == 8;
+    return matrix[i]?.[j] == "m";
 }
 
 function getMatrix(nCol, nRow, fill = 0) {

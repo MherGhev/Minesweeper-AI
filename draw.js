@@ -20,7 +20,7 @@ function getRowDiv(row) {
 function getCellDiv(cell) {
     const fieldCellDiv = document.createElement("div");
     fieldCellDiv.classList.add("fieldcell-div");
-    if (cell == 8) {
+    if (cell == "m") {
         fieldCellDiv.innerHTML = '<i class="fa-solid fa-bomb"></i>'
     } else {
         fieldCellDiv.innerHTML = cell === 0 ? "" : cell;
