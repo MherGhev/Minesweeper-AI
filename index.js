@@ -132,3 +132,47 @@ document.body.appendChild(getFieldDiv(mineField));
 
 
 document.body.appendChild(getFieldDiv(state));
+
+
+// function solveMineField(mineField) {
+//     const rows = mineField.length;
+//     const cols = mineField[0].length;
+//     const visited = new Array(rows).fill(false).map(() => new Array(cols).fill(false));
+
+//     function isSafe(i, j) {
+//         return i >= 0 && i < rows && j >= 0 && j < cols && mineField[i][j] !== "m" && !visited[i][j];
+//     }
+
+//     function dfs(i, j) {
+//         if (!isSafe(i, j)) {
+//             return false;
+//         }
+
+//         visited[i][j] = true;
+
+//         // If the cell is a mine, backtrack
+//         if (mineField[i][j] === "m") {
+//             visited[i][j] = false;
+//             return false;
+//         }
+
+//         // Explore neighbors
+//         dfs(i - 1, j);
+//         dfs(i + 1, j);
+//         dfs(i, j - 1);
+//         dfs(i, j + 1);
+
+//         return true;
+//     }
+
+//     for (let i = 0; i < rows; i++) {
+//         for (let j = 0; j < cols; j++) {
+//             if (!visited[i][j]) {
+//                 if (!dfs(i, j)) {
+//                     // Backtrack and try another path
+//                     visited[i][j] = false;
+//                 }
+//             }
+//         }
+//     }
+// }
