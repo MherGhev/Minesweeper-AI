@@ -1,3 +1,6 @@
+const mainDiv = document.getElementById("main-div");
+
+
 class MineFieldGenerator {
     constructor(nRows, nCols, mineCellRatio) {
         this.nRows = nRows;
@@ -9,7 +12,7 @@ class MineFieldGenerator {
     generateMineField = (firstClickI = 0, firstClickJ = 0) => {
         const nCells = this.nRows * this.nCols;
 
-        let nMines = Math.floor(nCells * this.mineCellRatio);
+        let nMines = this.getMineCount();
 
         this.mineField = this.getMatrix(this.nCols, this.nRows);
 
@@ -90,11 +93,17 @@ class MineFieldGenerator {
         }
         return result;
     }
+
+    getMineCount() {
+        return Math.floor(this.nRows * this.nCols * this.mineCellRatio);
+    }
 }
 
 class MineSweeperGame {
     constructor(mineFieldGenerator) {
         this.mineFieldGenerator = mineFieldGenerator;
+        this.flagCount = 0;
+        this.mineCount = mineFieldGenerator.getMineCount();
     }
 
     startGame = (firstClickI, firstClickJ) => {
@@ -102,14 +111,24 @@ class MineSweeperGame {
         this.state = this.mineFieldGenerator.getMatrix(this.mineField.length, this.mineField[0].length, "u");
 
         this.revealCell(firstClickI, firstClickJ);
+        this.flagAllPossibleCells();
+
+        while (this.flagCount != this.mineCount) {
+            for (let i = 0; i < this.state.length; i++) {
+                for (let j = 0; j < this.state[i].length; j++) {
+                    if (this.state[i][j] === this.getSurroundingFlagCount(i, j)) {
+                        this.revealNeighboringCells(i, j);
+                        this.flagAllPossibleCells();
+                    }
+                }
+            }
+        }
     }
 
     revealCell(i, j) {
         if (this.isCoordinateOutOfBounds(this.state, i, j)) return;
 
         if (this.state[i][j] != "u") return;
-
-        if (this.state[i][j] == "f") return;
 
         this.state[i][j] = this.mineField[i][j];
 
@@ -145,12 +164,75 @@ class MineSweeperGame {
     }
 
     isCellFlag = (i, j) => {
-        return this.mineField[i]?.[j] == "f";
+        return this.state[i]?.[j] == "f";
     }
 
     isCoordinateOutOfBounds = (matrix, i, j) => {
         return i >= matrix.length || i < 0 || j >= matrix[i].length || j < 0;
     }
+
+    getEmptyNeighbors = (i, j) => {
+        let neighbors = [];
+
+        if (this.state[i]?.[j + 1] == 'u') {
+            neighbors.push([i, j + 1]);
+        }
+        if (this.state[i]?.[j - 1] == 'u') {
+            neighbors.push([i, j - 1]);
+        }
+        if (this.state[i - 1]?.[j + 1] == 'u') {
+            neighbors.push([i - 1, j + 1]);
+        }
+        if (this.state[i - 1]?.[j] == 'u') {
+            neighbors.push([i - 1, j]);
+        }
+        if (this.state[i - 1]?.[j - 1] == 'u') {
+            neighbors.push([i - 1, j - 1]);
+        }
+        if (this.state[i + 1]?.[j + 1] == 'u') {
+            neighbors.push([i + 1, j + 1]);
+        }
+        if (this.state[i + 1]?.[j] == 'u') {
+            neighbors.push([i + 1, j]);
+        }
+        if (this.state[i + 1]?.[j - 1] == 'u') {
+            neighbors.push([i + 1, j - 1]);
+        }
+        return neighbors;
+    }
+
+
+    flagCellIfPossible = (i, j) => {
+        let emptyNeighbors = this.getEmptyNeighbors(i, j);
+        let flagCount = this.getSurroundingFlagCount(i, j);
+
+        if (this.state[i][j] == emptyNeighbors.length + flagCount) {
+            for (let i = 0; i < emptyNeighbors.length; i++) {
+                this.state[emptyNeighbors[i][0]][emptyNeighbors[i][1]] = "f";
+                this.flagCount++;
+            }
+        }
+        return this.state;
+    }
+
+    flagAllPossibleCells = () => {
+        for (let i = 0; i < this.state.length; i++) {
+            for (let j = 0; j < this.state[i].length; j++) {
+                this.state = this.flagCellIfPossible(i, j);
+            }
+        }
+    }
+
+    isStateSolved() {
+        for (let i = 0; i < this.state.length; i++) {
+            for (let j = 0; j < this.state[i].length; j++) {
+                if (this.state[i][j] == "u") return false;
+                if (this.state[i][j] != "f" && this.state[i][j] != this.getSurroundingFlagCount(state, i, j)) return false;
+            }
+        }
+        return true;
+    }
+
 }
 
 
@@ -165,96 +247,8 @@ const mineField = mineSweeperGame.mineField;
 
 const state = mineSweeperGame.state;
 
-
-
-const isCellFlag = (state, i, j) => {
-    return state[i]?.[j] == "f";
-}
-
-const getSurroundingFlagCount = (state, i, j) => {
-    let count = 0;
-
-    count += isCellFlag(state, i - 1, j) ? 1 : 0;
-    count += isCellFlag(state, i + 1, j) ? 1 : 0;
-    count += isCellFlag(state, i, j - 1) ? 1 : 0;
-    count += isCellFlag(state, i, j + 1) ? 1 : 0;
-    count += isCellFlag(state, i - 1, j - 1) ? 1 : 0;
-    count += isCellFlag(state, i - 1, j + 1) ? 1 : 0;
-    count += isCellFlag(state, i + 1, j - 1) ? 1 : 0;
-    count += isCellFlag(state, i + 1, j + 1) ? 1 : 0;
-
-    return count;
-}
-
-
-
-function checkViolations(state) {
-    for (let i = 0; i < state.length; i++) {
-        for (let j = 0; j < state[i].length; j++) {
-            if (state != "f" || state != "u") {
-                if (state[i][j] > getSurroundingFlagCount(state, i, j)) return false;
-            }
-        }
-    }
-    return true;
-}
-
-let a = 1;
-
-function flag(state) {
-    a++;
-    state = copyMatrix(state);
-
-    if (a > 1) return state;
-    
-    for (let i = 0; i < state.length; i++) {
-        for (let j = 0; j < state[i].length; j++) {
-            if (state[i][j] == "u" && hasNumericNeighbor(state, i, j)) {
-                state[i][j] = "f";
-                state = flag(state);
-                break;
-            }
-        }
-    }
-    return state;
-}
-
-
-function hasNumericNeighbor(matrix, i, j) {
-    let result = false;
-    result = result || typeof matrix[i - 1]?.[j - 1] == "number"
-    result = result || typeof matrix[i - 1]?.[j] == "number"
-    result = result || typeof matrix[i - 1]?.[j + 1] == "number"
-    result = result || typeof matrix[i]?.[j - 1] == "number"
-    result = result || typeof matrix[i]?.[j + 1] == "number"
-    result = result || typeof matrix[i + 1]?.[j - 1] == "number"
-    result = result || typeof matrix[i + 1]?.[j] == "number"
-    result = result || typeof matrix[i + 1]?.[j + 1] == "number"
-
-    return result;
-}
-
-
-function copyMatrix(matrix) {
-    const result = [];
-    for (let i = 0; i < matrix.length; i++){
-        result.push([]);
-        for (let j = 0; j < matrix[i].length; j++){
-            result[i].push(matrix[i][j])
-        }
-    }
-    return result;
-}
-
-
-let state1 = flag(state)
-
-
-
-const mainDiv = document.getElementById("main-div");
-
 mainDiv.appendChild(getFieldDiv(mineField));
-mainDiv.appendChild(getFieldDiv(state1));
+mainDiv.appendChild(getFieldDiv(state));
 
 
 
