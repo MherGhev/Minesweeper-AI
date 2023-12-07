@@ -4,8 +4,14 @@
     box-sizing: border-box;
 }
 
+#main-div{
+    display: flex;
+    flex-direction: row;
+}
+
 .minefield-div {
     flex-direction: column;
+    margin: 10px
 }
 
 .fieldcell-div {
@@ -16,15 +22,14 @@
     align-items: center;
     justify-content: center;
     background-color: #e5c29f;
-    
 }
 
-.fieldrow-div{
+.fieldrow-div {
     display: flex;
     flex-direction: row;
 }
 
-.cell-1{
+.cell-1 {
     background-color: #0492cf;
 }
 

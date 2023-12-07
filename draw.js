@@ -22,7 +22,10 @@ function getCellDiv(cell) {
     fieldCellDiv.classList.add("fieldcell-div");
     if (cell == "m") {
         fieldCellDiv.innerHTML = '<i class="fa-solid fa-bomb"></i>'
-    } else {
+    } else if (cell == "f") {
+        fieldCellDiv.innerHTML = '<i class="fa-solid fa-flag"></i>'
+    }
+    else {
         fieldCellDiv.innerHTML = cell === 0 ? "" : cell;
         fieldCellDiv.classList.add(`cell-${cell}`)
     }
