@@ -107,13 +107,21 @@ class MineSweeperGame {
     }
 
     startGame = (firstClickI, firstClickJ) => {
+        this.firstClickI = firstClickI;
+        this.firstClickJ = firstClickJ;
         this.mineField = mineFieldGenerator.generateMineField(firstClickI, firstClickJ);
         this.state = this.mineFieldGenerator.getMatrix(this.mineField.length, this.mineField[0].length, "u");
+    }
 
-        this.revealCell(firstClickI, firstClickJ);
+    solve = () => {
+        console.log("MineField: ", this.mineField);
+        this.revealCell(this.firstClickI, this.firstClickJ);
         this.flagAllPossibleCells();
 
+        let iterationCount = 0;
         while (this.flagCount != this.mineCount) {
+        // while (this.isStateSolved()) {
+            if (iterationCount++ > 500) return alert("Can't solve this")
             for (let i = 0; i < this.state.length; i++) {
                 for (let j = 0; j < this.state[i].length; j++) {
                     if (this.state[i][j] === this.getSurroundingFlagCount(i, j)) {
@@ -124,6 +132,7 @@ class MineSweeperGame {
             }
         }
     }
+
 
     revealCell(i, j) {
         if (this.isCoordinateOutOfBounds(this.state, i, j)) return;
@@ -227,12 +236,10 @@ class MineSweeperGame {
         for (let i = 0; i < this.state.length; i++) {
             for (let j = 0; j < this.state[i].length; j++) {
                 if (this.state[i][j] == "u") return false;
-                if (this.state[i][j] != "f" && this.state[i][j] != this.getSurroundingFlagCount(state, i, j)) return false;
             }
         }
         return true;
     }
-
 }
 
 
@@ -243,15 +250,12 @@ const mineSweeperGame = new MineSweeperGame(mineFieldGenerator);
 
 mineSweeperGame.startGame(4, 4);
 
+mineSweeperGame.solve();
+
 const mineField = mineSweeperGame.mineField;
 
 const state = mineSweeperGame.state;
 
 mainDiv.appendChild(getFieldDiv(mineField));
 mainDiv.appendChild(getFieldDiv(state));
-
-
-
-
-
 

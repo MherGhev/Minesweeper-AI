@@ -21,9 +21,11 @@ function getCellDiv(cell) {
     const fieldCellDiv = document.createElement("div");
     fieldCellDiv.classList.add("fieldcell-div");
     if (cell == "m") {
-        fieldCellDiv.innerHTML = '<i class="fa-solid fa-bomb"></i>'
+        fieldCellDiv.innerHTML = '<i class="fa-solid fa-bomb"></i>';
     } else if (cell == "f") {
-        fieldCellDiv.innerHTML = '<i class="fa-solid fa-flag"></i>'
+        fieldCellDiv.innerHTML = '<i class="fa-solid fa-flag"></i>';
+    } else if (cell == "u") {
+        fieldCellDiv.classList.add("uncovered-cell");
     }
     else {
         fieldCellDiv.innerHTML = cell === 0 ? "" : cell;
