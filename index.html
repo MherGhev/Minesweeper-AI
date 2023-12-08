@@ -1,15 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minesweeper</title>
-    <link rel="stylesheet" href="./styles.css"/>
+    <link rel="stylesheet" href="./styles.css" />
     <script src="https://kit.fontawesome.com/28caf18a35.js" crossorigin="anonymous"></script>
 </head>
+
 <body>
-    <div id="main-div"></div>
+    <div id="main">
+        <h1 class="title">
+            <span style="color: #0492cf">M</span>
+            <span style="color: #7bc043">I</span>
+            <span style="color: #ee4035">N</span>
+            <span style="color: #762f9d">E</span>
+            <span style="color: #ff901a">S</span>
+            <span style="color: #0492cf">W</span>
+            <span style="color: #7bc043">E</span>
+            <span style="color: #ee4035">E</span>
+            <span style="color: #762f9d">P</span>
+            <span style="color: #ff901a">E</span>
+            <span style="color: #0492cf">R</span>
+        </h1>
+        <h4 id="error-message-text" style="display: none;">The Algorithm Couldn't Solve This Mine Field</h4>
+        <div id="boards-div"></div>
+        <button id="solve-again-button">Solve Another One!</button>
+    </div>
+
     <script src="./draw.js"></script>
+    <script src="./MineFieldGenerator.js"></script>
+    <script src="./MineSweeperSolver.js"></script>
     <script src="./index.js"></script>
 </body>
+
 </html>
