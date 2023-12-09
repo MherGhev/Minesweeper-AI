@@ -35,27 +35,6 @@ solveAgainButton.addEventListener("click", () => {
 
 });
 
-let countOfSuccess = 0;
-let totalCases = 100;
-
-
-function analyzeSuccessRate() {
-    for (let j = 0.01; j < 0.1; j += 0.01) {
-        countOfSuccess = 0;
-        for (let i = 0; i < totalCases; i++) {
-            const mineFieldGenerator = new MineFieldGenerator(16, 16, j);
-
-            const mineSweeperSolver = new MineSweeperSolver(mineFieldGenerator);
-
-            mineSweeperSolver.startGame(4, 4);
-
-            const couldSolve = mineSweeperSolver.solve();
-            if (couldSolve) countOfSuccess++;
-        }
-
-        console.log(`Success Rate For ${j}: `, countOfSuccess / totalCases)
-    }
-}
 
 
 

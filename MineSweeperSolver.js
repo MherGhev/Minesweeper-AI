@@ -19,7 +19,7 @@ class MineSweeperSolver {
         let iterationCount = 0;
         while (this.flagCount != this.mineCount) {
             if (iterationCount++ > 10)
-                return false;
+                return { isSolved: false, iterationCount };
             for (let i = 0; i < this.state.length; i++) {
                 for (let j = 0; j < this.state[i].length; j++) {
                     if (this.state[i][j] === this.getSurroundingFlagCount(i, j)) {
@@ -30,7 +30,7 @@ class MineSweeperSolver {
                 }
             }
         }
-        return true;
+        return { isSolved: true, iterationCount }
     }
 
 
