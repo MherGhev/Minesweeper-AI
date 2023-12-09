@@ -11,9 +11,9 @@ function init() {
 
     mineSweeperSolver.startGame(4, 4);
 
-    const couldSolve = mineSweeperSolver.solve();
+    const stats = mineSweeperSolver.solve();
 
-    if (!couldSolve) {
+    if (!stats.isSolved) {
         errorMessageText.style.display = "inline";
     }
 
