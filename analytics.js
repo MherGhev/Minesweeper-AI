@@ -20,7 +20,6 @@ function analyze() {
     const testTimes = 1000;
 
     for (let i = 0; i < testTimes; i++) {
-        console.log(i);
         const mineFieldGenerator = new MineFieldGenerator(16, 16, 0.1);
 
         const mineSweeperSolver = new MineSweeperSolver(mineFieldGenerator);
@@ -33,7 +32,7 @@ function analyze() {
 
         const endTime = performance.now();
 
-        const solutionTime = startTime - endTime
+        const solutionTime = endTime - startTime
         if (solution.isSolved) {
             successfulSolutions.times.push(solutionTime);
             successfulSolutions.iterations.push(solution.iterationCount);
@@ -44,8 +43,8 @@ function analyze() {
         }
     }
 
-    console.log("Percentage of successful solutions: ", successfulSolutions.length / testTimes);
-    console.log("Percentage of failed solutions: ", failedSolutions.length / testTimes);
+    console.log("Percentage of successful solutions: ", successfulSolutions.times.length / testTimes);
+    console.log("Percentage of failed solutions: ", failedSolutions.times.length / testTimes);
 
     console.log("------------------");
 
@@ -56,7 +55,6 @@ function analyze() {
 
     console.log("Successful solution iteration count:", sum(successfulSolutions.iterations) / testTimes);
     console.log("Failed solution iteration count:", sum(failedSolutions.iterations) / testTimes);
-
 }
 
-analyze();
+// analyze();
